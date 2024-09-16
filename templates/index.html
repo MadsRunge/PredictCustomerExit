@@ -1,0 +1,193 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1a56db;
+            --light-blue: #e1effe;
+            --dark-blue: #1e429f;
+            --light-gray: #f3f4f6;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 1000px;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .glass-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .predict-button {
+            background: linear-gradient(90deg, #4c51bf, #6366f1);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .predict-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        .predict-button:hover::before {
+            left: 100%;
+        }
+        .result {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-3xl font-bold mb-6 text-center text-white">Customer Churn Predictor</h2>
+        <form method="post" class="bento-grid">
+            <div class="glass-effect">
+                <label for="CreditScore" class="block mb-2 font-semibold text-white">Credit Score:</label>
+                <input type="number" name="CreditScore" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="Age" class="block mb-2 font-semibold text-white">Age:</label>
+                <input type="number" name="Age" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="Tenure" class="block mb-2 font-semibold text-white">Tenure:</label>
+                <input type="number" name="Tenure" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="Balance" class="block mb-2 font-semibold text-white">Balance:</label>
+                <input type="number" name="Balance" step="0.01" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="NumOfProducts" class="block mb-2 font-semibold text-white">Number of Products:</label>
+                <input type="number" name="NumOfProducts" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="HasCrCard" class="block mb-2 font-semibold text-white">Has Credit Card:</label>
+                <select name="HasCrCard" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="IsActiveMember" class="block mb-2 font-semibold text-white">Is Active Member:</label>
+                <select name="IsActiveMember" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="EstimatedSalary" class="block mb-2 font-semibold text-white">Estimated Salary:</label>
+                <input type="number" name="EstimatedSalary" step="0.01" required>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="Geography" class="block mb-2 font-semibold text-white">Geography:</label>
+                <select name="Geography" required>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Spain">Spain</option>
+                </select>
+            </div>
+            
+            <div class="glass-effect">
+                <label for="Gender" class="block mb-2 font-semibold text-white">Gender:</label>
+                <select name="Gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            
+            <div class="col-span-full mt-6">
+                <button type="submit" class="w-full predict-button">Predict</button>
+            </div>
+        </form>
+        
+        {% if result %}
+        <div class="result">
+            <h3 class="text-xl">{{ result }}</h3>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const predictButton = document.querySelector('.predict-button');
+            predictButton.addEventListener('mousemove', (e) => {
+                const rect = e.target.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                predictButton.style.setProperty('--x', ${x}px);
+                predictButton.style.setProperty('--y', ${y}px);
+            });
+        });
+    </script>
+</body>
+</html>
